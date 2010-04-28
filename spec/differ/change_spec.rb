@@ -18,11 +18,6 @@ describe Differ::Change do
     it 'should have a default delete' do
       @change.delete.should == ''
     end
-
-    it 'should stringify to ""' do
-      @format.should_receive(:format).once.and_return('')
-      @change.to_s.should == ''
-    end
   end
 
   describe '(insert only)' do
@@ -73,10 +68,5 @@ describe Differ::Change do
     it { (@change).should be_an_insert }
     it { (@change).should be_a_delete }
     it { (@change).should be_a_change }
-  end
-
-  it "should stringify via the current format's #format method" do
-    @format.should_receive(:format).once
-    Differ::Change.new.to_s
   end
 end

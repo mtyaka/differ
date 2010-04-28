@@ -68,15 +68,25 @@ module Differ
     end
 
     def to_s
-      @raw.to_s
+      format_as Differ.format
     end
 
     def format_as(f)
       f = Differ.format_for(f)
       @raw.inject('') do |sum, part|
         part = case part
-        when String then part
-        when Change then f.format(part)
+        when String
+          f.no_change part
+        when Change
+          if part.change?
+            f.change(part.delete, part.insert)
+          elsif part.delete?
+            f.delete(part.delete)
+          elsif part.insert?
+            f.insert(part.insert)
+          else
+            ''
+          end
         end
         sum << part
       end

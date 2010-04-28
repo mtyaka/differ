@@ -2,24 +2,20 @@ module Differ
   module Format
     module Color
       class << self
-        def format(change)
-          (change.change? && as_change(change)) ||
-          (change.delete? && as_delete(change)) ||
-          (change.insert? && as_insert(change)) ||
-          ''
+        def no_change(unchanged)
+          unchanged
         end
 
-      private
-        def as_insert(change)
-          "\033[32m#{change.insert}\033[0m"
+        def insert(inserted)
+          "\033[32m#{inserted}\033[0m"
         end
 
-        def as_delete(change)
-          "\033[31m#{change.delete}\033[0m"
+        def delete(deleted)
+          "\033[31m#{deleted}\033[0m"
         end
 
-        def as_change(change)
-          as_delete(change) << as_insert(change)
+        def change(deleted, inserted)
+          delete(deleted) << insert(inserted)
         end
       end
     end

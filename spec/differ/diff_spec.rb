@@ -7,36 +7,32 @@ describe Differ::Diff do
   end
 
   describe '#to_s' do
-    before(:each) do
-      @format = Differ.format
-    end
-
-    it 'should concatenate the result list' do
-      diff('a', 'b', 'c').to_s.should == 'abc'
-    end
-
-    it 'should concatenate without regard for the $;' do
-      $; = '*'
-      diff('a', 'b', 'c').to_s.should == 'abc'
-    end
-
-    it 'should delegate insertion changes to Differ#format' do
-      i = +'b'
-      @format.should_receive(:format).once.with(i).and_return('!')
-      diff('a', i, 'c').to_s.should == 'a!c'
+    it 'should delegate to #format_as, using the global format' do
+      @format = mock('Format')
+      Differ.should_receive(:format).and_return(@format)
+      @diff = diff('a', 'b', 'c')
+      @diff.should_receive(:format_as).with(@format).and_return('a-b-c')
+      @diff.to_s.should == 'a-b-c'
     end
   end
 
   describe '#format_as' do
     before(:each) do
-      @change = +'b'
-      Differ.format = Module.new { def self.format(c); raise :error; end }
-      @format = Module.new { def self.format(c); end }
+      @format = Module.new
     end
 
-    it 'should delegate change formatting to the given format' do
-      @format.should_receive(:format).once.with(@change).and_return('!')
-      diff('a', @change, 'c').format_as(@format).should == 'a!c'
+    it 'should delegate formatting to the given format' do
+      s = 'unchanged'
+      i = +'inserted'
+      d = -'deleted'
+      c = 'changed' >> 'completely'
+
+      @format.should_receive(:no_change).with('unchanged').and_return('=unchanged ')
+      @format.should_receive(:insert).with('inserted').and_return('+inserted ')
+      @format.should_receive(:delete).with('deleted').and_return('-deleted ')
+      @format.should_receive(:change).with('changed', 'completely').and_return('changed>>completely')
+
+      diff(s, i, d, c).format_as(@format).should == '=unchanged +inserted -deleted changed>>completely'
     end
 
     it 'should use Differ#format_for to grab the correct format' do

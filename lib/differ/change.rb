@@ -18,11 +18,6 @@ module Differ
       !@insert.empty? && !@delete.empty?
     end
 
-    def to_s
-      Differ.format.format(self)
-    end
-    alias :inspect :to_s
-
     def ==(other)
       self.insert == other.insert && self.delete == other.delete
     end

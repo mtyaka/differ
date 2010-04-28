@@ -2,24 +2,20 @@ module Differ
   module Format
     module Ascii
       class << self
-        def format(change)
-          (change.change? && as_change(change)) ||
-          (change.delete? && as_delete(change)) ||
-          (change.insert? && as_insert(change)) ||
-          ''
+        def no_change(unchanged)
+          unchanged
         end
 
-      private
-        def as_insert(change)
-          "{+#{change.insert.inspect}}"
+        def insert(inserted)
+          "{+#{inserted.inspect}}"
         end
 
-        def as_delete(change)
-          "{-#{change.delete.inspect}}"
+        def delete(deleted)
+          "{-#{deleted.inspect}}"
         end
 
-        def as_change(change)
-          "{#{change.delete.inspect} >> #{change.insert.inspect}}"
+        def change(deleted, inserted)
+          "{#{deleted.inspect} >> #{inserted.inspect}}"
         end
       end
     end
