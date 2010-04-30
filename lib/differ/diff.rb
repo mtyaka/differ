@@ -76,7 +76,7 @@ module Differ
       @raw.inject('') do |sum, part|
         part = case part
         when String
-          f.no_change part
+          f.same part
         when Change
           if part.change?
             f.change(part.delete, part.insert)

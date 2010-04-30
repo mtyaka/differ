@@ -2,7 +2,7 @@ module Differ
   module Format
     module Ascii
       class << self
-        def no_change(unchanged)
+        def same(unchanged)
           unchanged
         end
 

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Differ::Format::Color do
   it 'should not format unchanged parts' do
     expected = 'UNCHANGED'
-    Differ::Format::Color.no_change('UNCHANGED').should == expected
+    Differ::Format::Color.same('UNCHANGED').should == expected
   end
 
   it 'should format inserts well' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Differ::Format::HTML do
   it 'should not format unchanged parts' do
     expected = 'UNCHANGED'
-    Differ::Format::HTML.no_change('UNCHANGED').should == expected
+    Differ::Format::HTML.same('UNCHANGED').should == expected
   end
 
   it 'should format inserts well' do

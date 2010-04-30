@@ -27,7 +27,7 @@ describe Differ::Diff do
       d = -'deleted'
       c = 'changed' >> 'completely'
 
-      @format.should_receive(:no_change).with('unchanged').and_return('=unchanged ')
+      @format.should_receive(:same).with('unchanged').and_return('=unchanged ')
       @format.should_receive(:insert).with('inserted').and_return('+inserted ')
       @format.should_receive(:delete).with('deleted').and_return('-deleted ')
       @format.should_receive(:change).with('changed', 'completely').and_return('changed>>completely')
